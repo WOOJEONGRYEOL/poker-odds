@@ -99,6 +99,7 @@
     .seat-id{ grid-area:id; min-width:0; }
     .bar-cell{ grid-area:bar; }
     .pct{ grid-area:pct; }
+    .draw-list{ grid-column:1 / -1; }
   }
   .seat{ transition:opacity .35s; }
   .seat.lost{ opacity:.38; }
@@ -182,8 +183,19 @@
   .tap-hint{ font-size:10px; letter-spacing:.1em; text-transform:uppercase; opacity:.62; }
   .overlay.tappable{ cursor:pointer; }
   .overlay.tappable:hover{ box-shadow:0 0 0 1px var(--felt-muted); }
-  .draw{ display:inline-block; margin-left:7px; padding:1px 6px; border-radius:2px;
-         background:var(--felt-2); color:var(--felt-ink); font-size:9px; letter-spacing:.03em; }
+  .draw{ display:inline-flex; align-items:center; gap:5px; margin-left:7px; padding:2px 7px; border-radius:2px;
+         background:var(--felt-2); color:var(--felt-ink); border:1px solid transparent;
+         font-family:var(--f-ui); font-size:9px; letter-spacing:.03em; cursor:pointer; min-height:0; }
+  .draw:hover{ border-color:var(--felt-muted); background:var(--felt-2); }
+  .draw.on{ border-color:var(--felt-ink); }
+  .draw .caret{ opacity:.6; font-size:8px; }
+  .draw-list{ grid-column:1 / -1; display:flex; flex-direction:column; gap:7px;
+              margin-top:2px; padding:10px 0 2px; border-top:1px solid var(--felt-line); }
+  .draw-line{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .draw-cat{ font-size:10px; font-weight:700; letter-spacing:.06em; color:var(--felt-ink);
+             min-width:104px; flex:none; }
+  .draw-cards{ display:flex; gap:3px; flex-wrap:wrap; }
+  .draw-foot{ font-family:var(--f-mono); font-size:9px; color:var(--felt-muted); }
   .made-row{ display:flex; flex-direction:column; gap:5px; padding:10px 0; border-bottom:1px solid var(--line-soft); }
   .made-row:last-child{ border-bottom:0; }
   .made-head{ display:flex; align-items:center; gap:8px; font-size:11px; }
@@ -304,6 +316,8 @@
     .seat-id{ grid-area:id; min-width:0; flex-wrap:wrap; }
     .bar-cell{ grid-area:bar; }
     .pct{ grid-area:pct; min-width:0; font-size:26px; }
+    .draw-list{ grid-column:1 / -1; }
+    .draw-cat{ min-width:0; }
     .seat-id{ min-width:0; }
     .card{ width:30px; height:42px; }
     .card .r{ font-size:14px; } .card .s{ font-size:11px; }
@@ -547,7 +561,7 @@
       <p><strong>숏덱(6+)</strong>은 2~5를 빼 36장으로 칩니다. 플러시를 만들 카드가 줄어드니 플러시가 귀해지고, 그래서 <strong>플러시가 풀하우스보다 강합니다</strong>. A-6-7-8-9도 스트레이트가 되고요. 족보 순서를 바꾸는 것만으로 같은 엔진이 그대로 돌아갑니다.</p>
       <h2>이긴다가 아니라, 무엇이 되어서 이기는가</h2>
       <p>승률 하나만으로는 판이 어떻게 굴러가는지 알 수 없습니다. 46%가 "지금 이기고 있는데 아슬아슬한" 46%인지, "지금은 꼴찌지만 플러시가 뜨면 이기는" 46%인지가 전혀 다르니까요. 그래서 두 가지를 덧붙였습니다.</p>
-      <p>첫째, 오버레이의 이름 아래에 <strong>지금 무엇이 되어 있는지</strong>가 뜹니다. 플랍이 깔리는 순간부터 "원페어", "투페어"처럼요. 그 옆에는 <strong>드로우</strong>가 붙습니다 — "플러시 드로우 9장"은 다음 한 장 중 9장이 플러시를 완성시킨다는 뜻입니다. 이 숫자는 규칙을 따로 짜 넣은 게 아니라 남은 덱을 한 장씩 실제로 놓아보고 센 것이라, 오마하의 "정확히 2+3"이나 숏덱의 뒤바뀐 족보에서도 그냥 맞습니다.</p>
+      <p>첫째, 오버레이의 이름 아래에 <strong>지금 무엇이 되어 있는지</strong>가 뜹니다. 플랍이 깔리는 순간부터 "원페어", "투페어"처럼요. 그 옆에는 <strong>드로우</strong>가 붙습니다 — "플러시 드로우 9장"은 다음 한 장 중 9장이 플러시를 완성시킨다는 뜻입니다. 이 숫자는 규칙을 따로 짜 넣은 게 아니라 남은 덱을 한 장씩 실제로 놓아보고 센 것이라, 오마하의 "정확히 2+3"이나 숏덱의 뒤바뀐 족보에서도 그냥 맞습니다. <strong>그 칩을 누르면 그 아홉 장이 실제로 어떤 카드인지</strong> 높은 순으로 펼쳐집니다. 무엇이 되는지에 따라 묶여 있어서, 플러시를 만드는 카드와 그냥 페어가 되는 카드가 구분돼 보입니다. 마우스를 올리면 목록이 바로 뜹니다.</p>
       <p>둘째, <strong>완성 확률</strong> 패널은 리버까지 갔을 때 각자의 패가 어느 족보로 끝나는지의 분포를 보여줍니다. 시뮬레이션이 이미 매 판 결과를 알고 있으니, 이기고 지는 것만 세는 대신 <em>무엇이 되었는지</em>도 같이 세면 공짜로 얻어지는 값입니다. 색은 하나의 좌석 색을 진하기로만 나눠 씁니다 — 족보는 약함에서 강함으로 이어지는 순서라, 서로 다른 아홉 색을 쓰면 그 순서가 사라지기 때문입니다.</p>
       <p>여기서 룰의 성격이 눈에 보입니다. 홀덤에서 플러시 드로우는 <code>1 − C(36,2)/C(45,2) = 36.4%</code>로 완성되고, 같은 자리에서 오마하는 투페어 이상이 90%를 넘으며, 숏덱에서는 스트레이트가 46%까지 올라갑니다. 왜 숏덱이 플러시를 풀하우스보다 위에 두는지가 이 분포에 그대로 나옵니다.</p>
       <h2>승률을 아는 것과 베팅을 잘하는 것</h2>
@@ -620,6 +634,7 @@
              note:"2~5를 뺀 36장. <b>플러시가 풀하우스보다 강하고</b>, A-6-7-8-9도 스트레이트입니다." }
   };
   let V = VARIANTS.holdem;
+  const cardText = c => RANKS[rankOf(c)] + SUITS[suitOf(c)];
   const catNames = () => V.from ? CATS_SHORT : CATS;
   const catName = score => catNames()[score >> 20];
   const deckCards = () => { const d = []; for (let c = 0; c < 52; c++) if (rankOf(c) >= V.from) d.push(c); return d; };
@@ -717,8 +732,9 @@
       if (nb < 5) for (const c of avail){        // 남은 덱을 한 장씩 놓아본다 — 룰과 무관하게 정확
         b[nb] = c;
         const cat = bestScore(h, b, nb + 1) >> 20;
-        if (cat > made) draws[cat] = (draws[cat] || 0) + 1;
+        if (cat > made) (draws[cat] || (draws[cat] = [])).push(c);   // 개수만이 아니라 카드 자체를 들고 있는다
       }
+      for (const k in draws) draws[k].sort((x, y) => rankOf(y) - rankOf(x) || suitOf(x) - suitOf(y));
       return { made, draws, left: avail.length };
     });
   }
@@ -1113,8 +1129,19 @@
         sub.appendChild(document.createTextNode(catNames()[ol.made]));
         const dk = Object.keys(ol.draws).map(Number).sort((a, b) => b - a);
         if (dk.length){
-          const n = ol.draws[dk[0]];
-          sub.appendChild(el("span","draw", `${catNames()[dk[0]]} 드로우 ${n}장`));
+          const open = S.drawOpen === i;
+          const chip = el("button","draw" + (open ? " on" : ""));
+          chip.type = "button";
+          chip.textContent = `${catNames()[dk[0]]} 드로우 ${ol.draws[dk[0]].length}장`;
+          chip.appendChild(el("span","caret", open ? "▾" : "▸"));
+          chip.title = dk.map(c => `${catNames()[c]} ${ol.draws[c].length}장 — `
+                                 + ol.draws[c].map(cardText).join(" ")).join("\n");
+          chip.addEventListener("click", ev => {
+            ev.stopPropagation();                       // 한 장씩 모드의 오버레이 탭과 겹치지 않게
+            S.drawOpen = open ? null : i;
+            renderSeats();
+          });
+          sub.appendChild(chip);
         }
       }
       else sub.textContent = h[0] === null && h[1] === null ? "무작위 상대" : "공개된 패";
@@ -1138,8 +1165,23 @@
       id.appendChild(hand);
       row.appendChild(id);
       buildBar(row, i);
+      if (S.drawOpen === i && ol && Object.keys(ol.draws).length) row.appendChild(drawList(ol));
       host.appendChild(row);
     });
+  }
+  // 어떤 카드가 뜨면 무엇이 되는가 — 높은 카드부터
+  function drawList(ol){
+    const box = el("div","draw-list");
+    Object.keys(ol.draws).map(Number).sort((a, b) => b - a).forEach(cat => {
+      const line = el("div","draw-line");
+      line.appendChild(el("span","draw-cat", `${catNames()[cat]} ${ol.draws[cat].length}장`));
+      const cards = el("div","draw-cards");
+      ol.draws[cat].forEach(c => { const e = cardEl(c, true); e.tabIndex = -1; cards.appendChild(e); });
+      line.appendChild(cards);
+      box.appendChild(line);
+    });
+    box.appendChild(el("div","draw-foot", `남은 ${ol.left}장 중`));
+    return box;
   }
   function buildBar(row, i){
     const cell = el("div","bar-cell");
